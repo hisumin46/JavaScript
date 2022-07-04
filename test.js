@@ -24,14 +24,18 @@ const students = [
   new Student('E', 18, true, 88)
 ];
 
+
 const reversePrint = (students) => {
+  let list = []
   for(let student of students) {
     if (student.score >= 50) {
-      console.log(student.score);
+      list.push(student.score)
     }
   }
+  return list.sort();
 };
 console.log(reversePrint(students));
+
 
 
 
