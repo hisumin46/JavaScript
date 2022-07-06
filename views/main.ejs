@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script>
+    // 라우터에서 쿼리스트링으로 값을 가져옴
+    let name = '<%= name %>';  // ssoid 
+    console.log(`===> name: ${name}`);
+    let data = {id : 1}
+    console.log(data);
+    window.onload = function() {
+
+
+      $.ajax({
+        url : "/get-db", 
+        type : 'post',
+        data: {"id" : 1},
+        dataType: 'json',
+        async:false,
+        success: function(getData) {
+          console.log(getData);
+        },
+        error : (req, status, err) => {
+          console.error(`디비 테이블 가져오기 에러${req.status, req.responseText, err}`);
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+  <h1>hihi</h1>
+  <h1></h1>
+</body>
+</html>
