@@ -10,14 +10,6 @@ export default class Items extends Component {
       <ul>
         ${items.map(item => `<li>${item}</li>`).join('')}
       </ul>
-      <button>추가</button>
     `
-  }
-
-  setEvent () {
-    this.target.querySelector('button').addEventListener('click', () => {
-      const { items } = this.state;
-      this.setState({ items: [ ...items, `item${items.length + 1}` ] });
-    });
   }
 }

@@ -10,11 +10,5 @@ export default class Component {
   template () { return ''; }
   render () {
     this.target.innerHTML = this.template();
-    this.setEvent();
-  }
-  setEvent () {}
-  setState (newState) {
-    this.state = { ...this.state, ...newState };
-    this.render();
   }
 }
