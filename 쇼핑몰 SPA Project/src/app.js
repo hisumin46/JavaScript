@@ -5,8 +5,6 @@ import CartPage from "./pages/CartPage.js";
 export default class App {
   constructor($target) {
     this.$target = $target;
-    console.log($target);
-    // const $app = document.querySelector('.App');
     this.route($target);
   }
   
@@ -23,5 +21,3 @@ export default class App {
     }
   }
 }
-
-new App();
