@@ -110,7 +110,7 @@ export default class ProductDetail{
   }
   
   render() {
-    if (this.isInit) this.$target.appendChild(this.template());
+    if (this.isInit) this.$target.appendChild(this.template()); // 처음 render 에서만 사용
     this.isInit = false;
     this.setEvent();
 
@@ -130,7 +130,8 @@ export default class ProductDetail{
         const option = this.state.product.productOptions.find(option => option.id === selectOptionId);
         // 이미 선택한 option
         const selectOption = this.state.selectedOptions.find(selectObject => selectObject.optionId === selectOptionId);
-
+        
+        // 선택한 option이 selectOption에 없을때 새로운 selectOption의 정보를 만들어 setState
         if (option && !selectOption) {
           const selectOptionInfo = {
             optionId: option.id,

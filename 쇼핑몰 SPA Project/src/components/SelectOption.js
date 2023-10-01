@@ -23,16 +23,18 @@ export default class SelectOPtion {
   }
 
   template() {
+    // template의 내부함수로 가격의 총합을 구함
     const getTotalPrice = () => {
       const { price: productPrice } = this.state.product;
-
+      
       return this.state.selectedOptions.reduce((acc, option) => acc + ((productPrice + option.optionPrice) * option.quantity), 0);
     }
-
+    
+    // state 값이 있을때 
     const {product, selectedOptions=[]} = this.state;
     let selectedOptionsTag;
+    
     if (product && selectedOptions) {
-      debugger;
       selectedOptionsTag = `
         <h3>선택된 상품</h3>
         <ul>
@@ -63,11 +65,12 @@ export default class SelectOPtion {
 
   setEvent() {
     this.$target.addEventListener("change", e => {
+      // input이 변경될때만
       if (e.target.tagName === "INPUT") {
         const quantity = parseInt(e.target.value);
-        const {product, selectedOptions} = this.state;
-
-        if (typeof quantity === 'number' && selectedOptions.length != 0) {
+        const {product, selectedOptions=[]} = this.state;
+        
+        if (typeof quantity === 'number' && selectedOptions.length != 0) { // 값이 number이며 selectedOptions이 값이 있을때
           const optionId = parseInt(e.target.dataset.optionid);
           // 변경된 input의 option과 index 값
           const index = selectedOptions.findIndex(chageInput => chageInput.optionId === optionId);
@@ -75,6 +78,8 @@ export default class SelectOPtion {
           
           // input 입력값이 재고보다 많으면 재고값으로
           selectedOptions[index].quantity = (option.stock >= quantity)?quantity:option.stock;
+          
+          // 변경된 selectOptions 값 setState로 render
           this.setState({selectedOptions: selectedOptions});
         }
       }
