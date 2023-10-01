@@ -1,14 +1,18 @@
-import {reqProductList} from "../api/api.js"
-import ProductList from "../components/ProductList.js"
-// export default function ProdcutListPage($target) {
-//   const $page = document.querySelector(".ProductListPage");
+import {reqProductList} from "../apis/api.js";
+import ProductList from "../components/ProductList.js";
 
-//   $page.innerHTML = `<h1>상품 목록</h1>`;
+/**
+ * fcuntion exrpot
+  export default function ProdcutListPage($target) {
+    const $page = document.querySelector(".ProductListPage");
 
-//   this.render = () => {
-//     $target.append($page);
-//   }
-// }
+    $page.innerHTML = `<h1>상품 목록</h1>`;
+
+    this.render = () => {
+      $target.append($page);
+    }
+  }
+ */
 
 export default class ProdcutListPage {
   constructor($target) {
@@ -16,9 +20,11 @@ export default class ProdcutListPage {
     this.$target = $target;
 
     // render
+    this.$target.innerHTML = ``;
     const $page = document.createElement("div");
     $page.className = "ProductListPage";
     $page.innerHTML = "<h1>상품 목록</h1>";
+
     this.render($page);
     
     // api정보로 ProducList components 호출
@@ -30,7 +36,7 @@ export default class ProdcutListPage {
   }
   
   setState(nextState) {
-    this.state = nextState
+    this.state = nextState;
   }
 
   fetchProductList = async($page) => {

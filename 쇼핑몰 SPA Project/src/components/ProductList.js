@@ -18,49 +18,56 @@
 
 */
 
+import { routeChange } from "../../router.js"
+
 export default class ProductListPage {
   constructor({ $target, state }) {
-    console.log($target);
     //setup
     this.$target = $target;
     this.state = state;
 
     // state
     this.setState(this.state);
-
-    // render
-    this.render();
   }
 
   template() {
     const $productListUl = document.createElement("ul");
-    
     const productInfo = this.state;
-    productInfo.map(product => {
-      const $productListli = document.createElement("li");
-      const child =
-      `<li class="Product">
-        <img src="${product.imageUrl}">
-        <div class="Product__info">
-          <div>${product.name}</div>
-          <div>${product.price}~</div>
-        </div>
-      </li>`;
-      
-      $productListli.innerHTML = child;
-      $productListUl.appendChild($productListli);
-    }).join('');
-    
+
+    $productListUl.innerHTML = `
+      ${productInfo.map(product =>
+        `
+          <li class="Product" data-id="${product.id}">
+            <img src="${product.imageUrl}">
+            <div class="Product__info">
+              <div>${product.name}</div>
+              <div>${product.price}~</div>
+            </div>
+          </li>
+        `
+      ).join("")}`;
     return $productListUl;
   }
 
   render() {
-    debugger;
+    if (!this.state) return;
     this.$target.appendChild(this.template());
+    this.setEvent();
   }
 
-  setState(nextState) {
-    this.state = nextState
+  setState(newState) {
+    this.state = newState;
     this.render();
+  }
+
+  setEvent() {
+    this.$target.addEventListener("click", e => {
+    // $productListUl.addEventListenerㅇ"click", e => {
+    const $li = e.target.closest("li");
+      const productId = $li.dataset.id;
+      
+      // routeChange 로 url 변경
+      if (productId) routeChange(`/products/${productId}`);
+    })
   }
 }
