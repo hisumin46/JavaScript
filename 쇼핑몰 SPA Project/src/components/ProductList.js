@@ -18,7 +18,7 @@
 
 */
 
-import { routeChange } from "../../router.js"
+import { routeChange } from "../../public/routes/router.js"
 
 export default class ProductListPage {
   constructor({ $target, state }) {

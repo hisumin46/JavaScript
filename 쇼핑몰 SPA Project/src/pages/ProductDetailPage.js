@@ -20,7 +20,7 @@ export default class ProductDetailPage {
   render() {
     if (!this.state.product) { // 처음 render 시 api전 호출전
       this.$target.innerHTML = 'Loading..';
-    } else { // 
+    } else { 
       this.$target.innerHTML = ``;
       const $page = document.createElement("div");
       $page.className = "ProductDetailPage";
@@ -31,7 +31,7 @@ export default class ProductDetailPage {
       // ProductDettail호출
       new ProductDetail({
         $target: $page, 
-        state: {product:this.state.product, selectedOptions:[]}
+        state: { product: this.state.product, selectedOptions: [] }
       });
     }
   }
@@ -43,6 +43,6 @@ export default class ProductDetailPage {
 
   fetchProductInfo = async() => {
     const productInfoJson = await reqProduct(this.productId); // GET Product Info
-    this.setState({product:productInfoJson});
+    this.setState({ product: productInfoJson });
   }
 }

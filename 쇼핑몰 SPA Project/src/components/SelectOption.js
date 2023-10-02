@@ -10,7 +10,18 @@
   </li>
 </ul>
 <div class="ProductDetail__totalPrice">175,000원</div>
+
+[
+  {
+    productId: "상품 id",
+    optionId: "선택한 옵션의 id",
+    quantity: "선택한 수량"
+  }
+]
 */
+
+import { routeChange } from "../../public/routes/router.js";
+import { storageUtil } from "../../utils/storage.js";
 
 export default class SelectOPtion {
   constructor({$target, state}) {
@@ -32,10 +43,10 @@ export default class SelectOPtion {
     
     // state 값이 있을때 
     const {product, selectedOptions=[]} = this.state;
-    let selectedOptionsTag;
+    let $selectedOptionsTag;
     
     if (product && selectedOptions) {
-      selectedOptionsTag = `
+      $selectedOptionsTag = `
         <h3>선택된 상품</h3>
         <ul>
           ${selectedOptions.map(selectedOption => `
@@ -50,7 +61,7 @@ export default class SelectOPtion {
       `;
     }
 
-    return selectedOptionsTag;
+    return $selectedOptionsTag;
   }
 
   render() {
@@ -64,7 +75,8 @@ export default class SelectOPtion {
   }
 
   setEvent() {
-    this.$target.addEventListener("change", e => {
+    // input 타입으로 render 
+    this.$target.addEventListener("change", (e) => {
       // input이 변경될때만
       if (e.target.tagName === "INPUT") {
         const quantity = parseInt(e.target.value);
@@ -72,17 +84,43 @@ export default class SelectOPtion {
         
         if (typeof quantity === 'number' && selectedOptions.length != 0) { // 값이 number이며 selectedOptions이 값이 있을때
           const optionId = parseInt(e.target.dataset.optionid);
-          // 변경된 input의 option과 index 값
+
+          // 번경한 input의 selectedOptions[index] 값
           const index = selectedOptions.findIndex(chageInput => chageInput.optionId === optionId);
-          const option = product.productOptions.find(chageOption => chageOption.id === optionId);
+          if (index === -1 ) return; // stated에 input 값이 없는 경우 바로 리턴
           
-          // input 입력값이 재고보다 많으면 재고값으로
+          // 변경한 input의 product.productOptions option 데이터
+          const option = product.productOptions.find(chageOption => chageOption.id === optionId);
+
+          // state의 input 입력값이 재고보다 많으면 재고값으로
           selectedOptions[index].quantity = (option.stock >= quantity)?quantity:option.stock;
           
           // 변경된 selectOptions 값 setState로 render
           this.setState({selectedOptions: selectedOptions});
         }
       }
+    })
+    
+    // 주문하기 버튼 클릭시
+    this.$target.querySelector(".OrderButton").addEventListener("click", () => {
+        console.log("ssssss");
+        const { selectedOptions } = this.state;
+        
+        // localstroge 처리
+        const storageObject = new storageUtil;
+        // 장바구니에 있는 값가져오기
+        const cartList = storageObject.getItem("products_cart");
+        
+        // 기존 데이터와 새로운 데이터 합치기
+        storageObject.setItem("products_cart", 
+          cartList.concat(selectedOptions.map(option => ({
+            productId: option.productId,
+            optionId: option.optionId,
+            quantity: option.quantity
+          })))
+        );
+        console.log(storageObject.getItem('products_cart'));
+        routeChange("/cart");
     })
   }
 }

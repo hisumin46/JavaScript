@@ -134,7 +134,8 @@ export default class ProductDetail{
         // 선택한 option이 selectOption에 없을때 새로운 selectOption의 정보를 만들어 setState
         if (option && !selectOption) {
           const selectOptionInfo = {
-            optionId: option.id,
+            productId: this.state.product.id,
+            optionId: selectOptionId,
             optionName: option.name,
             optionPrice: option.price,
             quantity: 1
