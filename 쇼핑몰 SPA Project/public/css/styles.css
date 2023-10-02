@@ -164,3 +164,13 @@ body {
   padding-right: 16px;
   margin-bottom: 16px;
 }
+
+/*
+  custom selected option cancel
+*/
+.CancelButton {
+  background-color: #fff;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+}

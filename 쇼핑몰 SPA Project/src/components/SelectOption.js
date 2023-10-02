@@ -22,6 +22,7 @@
 
 import { routeChange } from "../../public/routes/router.js";
 import { storageUtil } from "../../utils/storage.js";
+import ProductDetail from "./ProductDetail.js";
 
 export default class SelectOPtion {
   constructor({$target, state}) {
@@ -53,6 +54,7 @@ export default class SelectOPtion {
             <li>
               ${selectedOption.optionName} ${product.price + selectedOption.optionPrice}원
               <input type="text" data-optionId="${selectedOption.optionId}" value="${selectedOption.quantity}">
+              <button class="CancelButton">X</button>
             </li>
           `).join('')}
         </ul>
@@ -103,9 +105,7 @@ export default class SelectOPtion {
     
     // 주문하기 버튼 클릭시
     this.$target.querySelector(".OrderButton").addEventListener("click", () => {
-        console.log("ssssss");
         const { selectedOptions } = this.state;
-        
         // localstroge 처리
         const storageObject = new storageUtil;
         // 장바구니에 있는 값가져오기
@@ -119,8 +119,25 @@ export default class SelectOPtion {
             quantity: option.quantity
           })))
         );
-        console.log(storageObject.getItem('products_cart'));
         routeChange("/cart");
+    })
+
+    // 선택한 option 삭제
+    this.$target.addEventListener("click", (e) => {
+      if (e.target.className === "CancelButton") {
+        // this.$target.querySelector(".CancelButton").addEventListener("click", (e) => {
+          const optionId = e.target.previousElementSibling.dataset.optionid;
+          const $targetLi = e.target.closest("li");
+          $targetLi.remove();
+          const newSelectOptions = this.state.selectedOptions.filter(option => option.optionId != optionId);
+    
+          this.setState({selectedOptions: newSelectOptions});
+          // 상위 컴포넌트의 상태를 변경해야됨 - 삭제한 option의 상태를 전달하여 삭제한 option 선택시 다시 선택할 수 있도록 
+          // new ProductDetail().setState({selectedOptions: newSelectOptions});
+      }
+      
+
+      
     })
   }
 }
