@@ -1,3 +1,5 @@
+import ContentTitle from "../components/ContentTitle.js";
+
 export default class SignupPage {
   constructor($target) {
     this.$target = $target;
@@ -9,10 +11,11 @@ export default class SignupPage {
   template() {
     const $main = document.createElement("main");
     $main.setAttribute("id", "page_content");
-    $main.innerHTML = `
-      <div class="content_title">
-          <h1> Hello, GreatPeoPle!</h1>
-      </div>
+    
+    // contentTitle
+    new ContentTitle($main, "Hello, GreatPeoPle!");
+
+    $main.innerHTML += `
       <div id="form_container">
         <span class="form_elem">
           <input id="name" placeholder="이름">

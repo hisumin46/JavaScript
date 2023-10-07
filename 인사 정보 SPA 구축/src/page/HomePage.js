@@ -1,3 +1,7 @@
+import storageUtil from "../../utils/storage.js";
+import ContentTitle from "../components/ContentTitle.js";
+import CardView from "../components/CardView.js"
+
 export default class HomePage {
   constructor($target) {
     this.$target = $target;
@@ -5,32 +9,20 @@ export default class HomePage {
     this.render();
   }
 
-  template() {
+  render() {
+    // getNewData
+    const storageObject = new storageUtil;
+    const personalInfo =  storageObject.getItem("personalInfo");
+    
+    // main tag
     const $main = document.createElement("main");
     $main.setAttribute("id", "page_content");
-    $main.innerHTML = `
-      <div class="content_title">
-        <h1> CardView </h1>
-      </div>
-      <div id="cards_container">
-        <div idx="1" class="card">
-          <div class="card_plane card_plane--front">Heedo</div>
-          <div class="card_plane card_plane--back">ESTJ</div>
-        </div>
-        <div idx="2" class="card">
-          <div class="card_plane card_plane--front">Kevin</div>
-          <div class="card_plane card_plane--back">INTJ</div>
-        </div>
-        <div idx="3" class="card">
-          <div class="card_plane card_plane--front">Dalmi</div>
-          <div class="card_plane card_plane--back">INFJ</div>
-        </div>
-      </div>
-    `;
-    return $main;
-  }
+    
+    // contentTitle
+    new ContentTitle($main, "CardView");
+    // CardView
+    new CardView($main, {"personalInfo": personalInfo});
 
-  render() {
-    this.$target.appendChild(this.template());
+    this.$target.appendChild($main);
   }
 }

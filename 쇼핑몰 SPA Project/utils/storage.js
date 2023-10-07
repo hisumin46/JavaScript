@@ -1,7 +1,6 @@
 export class storageUtil {
   constructor() {
     this.storage = localStorage;
-
   }
 
   getItem(key) {

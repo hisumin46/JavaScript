@@ -2,11 +2,14 @@ import Header from "./components/Header.js";
 import HomePage from "../src/page/HomePage.js";
 import SignupPage from "../src/page/SignupPage.js";
 import { init } from '../public/routes/router.js'
+import { getNewData, getOldData } from "./apis/api.js";
+import storageUtil from "../utils/storage.js";
 
 export default class App {
   constructor($tartget) {
     this.$tartget = $tartget;
-    
+    this.setData();
+
     // header
     new Header($tartget);
     
@@ -31,5 +34,14 @@ export default class App {
     init(this.route, this.$target);
     this.route();
     window.addEventListener('popstate', this.route);
+  }
+
+  setData = async() => {
+    let personalInfo = [];
+    const newDatae = await getNewData();
+    newDatae.map((person, index) => personalInfo.push({...person, ...{"idx":index}}) )
+    
+    const storageObject = new storageUtil;
+    storageObject.setItem("personalInfo", personalInfo);
   }
 }
