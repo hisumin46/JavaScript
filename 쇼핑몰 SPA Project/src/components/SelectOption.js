@@ -133,11 +133,12 @@ export default class SelectOPtion {
     
           this.setState({selectedOptions: newSelectOptions});
           // 상위 컴포넌트의 상태를 변경해야됨 - 삭제한 option의 상태를 전달하여 삭제한 option 선택시 다시 선택할 수 있도록 
-          // new ProductDetail().setState({selectedOptions: newSelectOptions});
+          // new ProductDetail().setState({$target: this.$target, selectedOptions: newSelectOptions});
+          // console.log(document.querySelector(".ProductDetailPage"));
+          // new ProductDetail({$target: document.querySelector(".ProductDetailPage"), state: {product : this.state.product, selectedOptions : newSelectOptions}});
+          new ProductDetail({$target: document.querySelector(".ProductDetailPage"), state: this.state});
+          // test.setState( {selectedOptions : newSelectOptions});
       }
-      
-
-      
     })
   }
 }
