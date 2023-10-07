@@ -7,7 +7,7 @@ export default class App {
   constructor($target) {
     this.$target = $target;
 
-    this.ronte = () => {
+    this.route = () => {
       const { pathname } = location; // location오브젝트 존재값 바로 변수 설정 location.pathname과 같음
       if (pathname === "/") {
         new ProductListPage($target);
@@ -20,9 +20,9 @@ export default class App {
     }
 
     //  ROUTE_CHANGE 이벤트 발생 시 마다 App의 this.route 함수 호출
-    init(this.ronte, this.$target);
-    this.ronte();
-    window.addEventListener('popstate', this.ronte);
+    init(this.route, this.$target);
+    this.route();
+    window.addEventListener('popstate', this.route);
     // window.onbeforeunload = () => {
     //   init(this.ronte, this.$target);
     // }

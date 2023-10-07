@@ -20,9 +20,15 @@ header {
 }
 
 .header_left {
+  position: absolute;
+  left: 15px;
+  cursor: pointer;
 }
 
 .header_right {
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
 }
 
 #page_content {
