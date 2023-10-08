@@ -74,7 +74,6 @@ import SelectOPtion from "./SelectOption.js";
 
 export default class ProductDetail {
   constructor({$target, state}) {
-    debugger;
     //setup
     this.$target = $target;
     this.state = state;
@@ -85,6 +84,9 @@ export default class ProductDetail {
   }
 
   template() {
+    // 이전 컴포넌트 미리 저장
+    const $h1 = this.$target.querySelector("h1");
+    
     this.$target.innerHTML = "";
     const productInfo = this.state.product;
     const $productDiv = document.createElement("div");
@@ -108,13 +110,12 @@ export default class ProductDetail {
     `;
 
     
-    return $productDiv;
+    return [$h1, $productDiv];
   }
   
   render() {
-    if (this.isInit) {
-      console.log("test");
-      this.$target.appendChild(this.template()); // 처음 render 에서만 사용
+    if (this.isInit) { // 처음 render 에서만 사용
+      this.template().map(tag => this.$target.appendChild(tag));
     }
     this.isInit = false;
     this.setEvent();
@@ -125,7 +126,6 @@ export default class ProductDetail {
   
   setState(newState) {
     this.state = {...this.state, ...newState};
-    console.log(this.state);
     this.render();
   }
 

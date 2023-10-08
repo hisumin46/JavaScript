@@ -23,6 +23,7 @@
 import { routeChange } from "../../public/routes/router.js";
 import { storageUtil } from "../../utils/storage.js";
 import ProductDetail from "./ProductDetail.js";
+import ProductListPage from "./ProductList.js";
 
 export default class SelectOPtion {
   constructor({$target, state}) {
@@ -137,7 +138,6 @@ export default class SelectOPtion {
           // console.log(document.querySelector(".ProductDetailPage"));
           // new ProductDetail({$target: document.querySelector(".ProductDetailPage"), state: {product : this.state.product, selectedOptions : newSelectOptions}});
           new ProductDetail({$target: document.querySelector(".ProductDetailPage"), state: this.state});
-          // test.setState( {selectedOptions : newSelectOptions});
       }
     })
   }
