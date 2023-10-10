@@ -13,9 +13,10 @@ export default class HomePage {
     // getNewData
     const storageObject = new storageUtil;
     const personalInfo = storageObject.getItem("personalInfo");
-    let cardStatus= [];
-    personalInfo.map(person => cardStatus.push({"idx": person.idx, "status": "card"}));
-    storageObject.setItem("cardStatus", cardStatus);
+    const cardStatus = (storageObject.getItem("cardStatus"))?storageObject.getItem("cardStatus"):[];
+    if(!cardStatus.length) {
+      personalInfo.map(person => cardStatus.push({"idx": person.idx, "status": "card"}));
+    }
 
     // main tag
     const $main = document.createElement("main");

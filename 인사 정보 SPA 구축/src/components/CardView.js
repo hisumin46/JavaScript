@@ -20,37 +20,45 @@ import storageUtil from "../../utils/storage.js";
 export default class CardView {
   constructor($target, state) {
     this.$target = $target;
+    this.isRender = true;
     this.setState(state);
     this.setEvent();
   }
   template() {
-    // const $div = document.createElement("div");
-    // $div.id = "cards_container";
-    // $div.innerHTML = `
-    // ${this.state.personalInfo.map(person => `
-    // <div idx="${person.idx}" class="card">
-    //     <div class="card_plane card_plane--front">${person.name}</div>
-    //     <div class="card_plane card_plane--back">${person.mbti}</div>
-    //   </div>
-    //   `).join("")}
-    // `;
     const $div = document.createElement("div");
     $div.id = "cards_container";
     this.state.cardStatus.map(card => {
       const $cardDiv = document.createElement("div");
+      
+      // set cardDiv class
       $cardDiv.setAttribute("idx", `${card.idx}`);
-      console.log(`${card.status.split(" ")}`);
-      $cardDiv.classList.add(`${card.status}`);
+      card.status.split(" ").map(state => {
+        $cardDiv.classList.add(`${state}`);
+      });
+      
+      // set element
       this.state.personalInfo.map(person => {
         if (person.idx != card.idx) return;
-        // div tag
-        const $cardPlaneDiv = document.createElement("div");
-        $cardPlaneDiv.classList.add("card_plane" ,`card_plane--${(card.status==="card")?"front":"back"}`);
-        // div text 
-        const $cardPlaneDivText = document.createTextNode(`${(card.status==="card")?`${person.name}`:`${person.mbti}`}`);
-        $cardPlaneDiv.appendChild($cardPlaneDivText);
         
-        $cardDiv.appendChild($cardPlaneDiv);
+        // div tag
+        const $cardDivFront = document.createElement("div");
+        $cardDivFront.classList.add("card_plane" ,`card_plane--front`);
+        $cardDivFront.appendChild(document.createTextNode(`${person.name}`));
+
+        const $cardDivBack = document.createElement("div");
+        $cardDivBack.classList.add("card_plane" ,`card_plane--back`);
+        $cardDivBack.appendChild(document.createTextNode(`${person.mbti}`));
+        
+        //set style
+        if(card.status === "card") {
+          $cardDivBack.style.display = "none";
+        } else {
+          $cardDivFront.style.display = "none";
+        }
+
+        $cardDiv.appendChild($cardDivFront);
+        $cardDiv.appendChild($cardDivBack);
+        
       });
       $div.appendChild($cardDiv);
     })
@@ -64,26 +72,39 @@ export default class CardView {
 
   setState(newState) {
     this.state = {...this.state, ...newState};
+    
     const storageObject = new storageUtil;
     storageObject.setItem("personalInfo" , this.state.personalInfo);
     storageObject.setItem("cardStatus" , this.state.cardStatus);
-    this.render();
+    
+    if (this.isRender) {
+      this.isRender = false;
+      this.render()
+    };
   }
 
   setEvent() {
     this.$target.addEventListener("click", (e) => {
       if (e.target.className === "card_plane card_plane--front") {
-        // state 를 변경해서 다시 그림
+        // 애니메이션 class 추가 & 카드 앞뒤면 style 설정
         e.target.parentElement.classList.add("is-flipped");
+        e.target.style.display = "none"; // 앞
+        e.target.nextSibling.style.display = ""; //뒤
+        
+        // state 변경
         const idx = e.target.parentElement.getAttribute("idx");
         let UpdateCardStatus = this.state.cardStatus;
         UpdateCardStatus[idx].status = "card is-flipped";
         this.setState({"cardStatus": UpdateCardStatus});
-
-
       } else if (e.target.className === "card_plane card_plane--back") {
         e.target.parentElement.classList.remove("is-flipped");
-        // e.target.style.display = "none";
+        e.target.style.display = "none"; // 뒤
+        e.target.previousSibling.style.display = ""; // 앞
+        
+        const idx = e.target.parentElement.getAttribute("idx");
+        let UpdateCardStatus = this.state.cardStatus;
+        UpdateCardStatus[idx].status = "card";
+        this.setState({"cardStatus": UpdateCardStatus});
       }
     })
   }
