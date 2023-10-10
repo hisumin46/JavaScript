@@ -12,8 +12,11 @@ export default class HomePage {
   render() {
     // getNewData
     const storageObject = new storageUtil;
-    const personalInfo =  storageObject.getItem("personalInfo");
-    
+    const personalInfo = storageObject.getItem("personalInfo");
+    let cardStatus= [];
+    personalInfo.map(person => cardStatus.push({"idx": person.idx, "status": "card"}));
+    storageObject.setItem("cardStatus", cardStatus);
+
     // main tag
     const $main = document.createElement("main");
     $main.setAttribute("id", "page_content");
@@ -21,7 +24,7 @@ export default class HomePage {
     // contentTitle
     new ContentTitle($main, "CardView");
     // CardView
-    new CardView($main, {"personalInfo": personalInfo});
+    new CardView($main, {...{"personalInfo": personalInfo}, ...{"cardStatus": cardStatus}});
 
     this.$target.appendChild($main);
   }

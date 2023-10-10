@@ -55,6 +55,7 @@ header {
   transform-origin: center right;
   transition: transform 1s;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, .2);
+  cursor: pointer;
 }
 
 .card.is-flipped {
