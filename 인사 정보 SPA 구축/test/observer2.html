@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <style>
+    ul {
+      padding-left: 0;
+    }
+
+    ul li {
+      background-color: pink;
+      margin-bottom: 20px;
+      list-style: none;
+      text-align: center;
+      color: #fff;
+      font-size: 100px;
+      padding: 100px 0;
+    }
+    
+    /* 짝수, 홀수 색상 구분하기 위해 */
+    li:nth-child(2n) {
+      background-color: skyblue;
+    }
+    </style> -->
+</head>
+<body>
+  <!-- json 데이터를 옵저버로 -->
+  <!-- <div id="root"></div> -->
+  <!-- <script>
+    // 스크롤할때마다 페이지 번호를 변경하는 방식으로 
+    // 번호가 변경되면 다음 10개의 레코드가 로드되는 형식
+    // https://jsonplaceholder.typicode.com/posts?_page=1 / page=2
+    let currentPage = 1; // 현재 로드된 페이지의 번호 
+    let isFetching = false; // 데이터를 가져오는 중인지 여부
+    let hasMore = true; // 가져올 더 많은 데이터가 있는지 여부
+    let root = document.getElementById('root');
+    const fetchData = async () => { // json 가져오기
+      isFetching = true; // 데이터 가져오는중
+      let response = await fetch(`https://jsonplaceholder.typicode.com/posts?_page=${currentPage}`);
+      let data = await response.json(); // 데이터 가공
+      console.log(data);
+      isFetching = false; // 데이터 다가져옴
+      if (data.length === 0) {
+        hasMore = false;
+        return
+      }
+      for(let post of data) { // html 보이기
+        let div = document.createElement('div');
+        div.innerHTML = `<h2>${post.title}</h2><p>${post.body}</p>`
+        root.appendChild(div);
+      }
+      currentPage++; // 현재 페이지 1 증가
+    }
+    // 스크롤 이벤트
+    window.addEventListener('scroll', () => { // 스크롤시
+      if (isFetching || !hasMore) return // 데이터를 가져오는중이거나 가져올 데이터가 없으면 return
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) fetchData(); 
+        // 현재 스크롤 위치(window.scrollY)와 브라우저 창의 높이(window.innerHeight)를 합친 값이 
+        // 문서의 전체 높이(document.body.offsetHeight)와 같거나 큰 경우에만 아래 코드를 실행한다. 
+        // 즉, 사용자가 페이지의 맨 아래에 도달했을 때를 의미.
+    })
+    fetchData();
+  </script> -->
+  
+  
+  <ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+  </ul>
+</body>
+
+  <!-- Scroll event - 과부화 위험있음 -->
+  <!-- <script>
+    (() => {
+      const $ul = document.querySelector('ul');
+      let $li;
+      let count = $ul.children.length;
+
+      document.addEventListener('scroll', () => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+          $li = $ul.appendChild(document.createElement('li'));
+          $li.textContent = ++count;
+        }
+      })
+    })();
+  </script> -->
+  <!-- 
+    intersection observer 
+    인터섹션 옵저버는 스크롤 되는 순간순간마다 이벤트를 확인하는 것이 아닌 
+    내가 지켜보고자 하는 대상을 등록시켜 
+    그 대상이 상위 요소 혹은 최상위 도큐먼트인 viewport와의 
+    교차 영역에 대한 변화를 감지할 수 있도록 하는 방법
+  -->
+  <script>
+    (() => {
+      const $ul = document.querySelector('ul');
+      let $li = document.querySelector('li:last-child');
+      let count = $ul.children.length;
+
+      // 1. 인터섹션 옵저버 생성
+      const io = new IntersectionObserver((entry, observer) => {
+        // console.log(entry, observer);
+        // 3. 현재 보이는 target 출력
+        const ioTarget = entry[0].target;
+        console.log(ioTarget); // <li>3</li>
+
+        // 4. viewport에 target이 보이면 하는 일
+        if (entry[0].isIntersecting) {
+          console.log('현재 보이는 타켓', ioTarget)
+          // 5. 현재 보이는 target 감시 취소해줘
+          io.unobserve($li);
+
+          // 6. 새로운 li 추가해
+          $li = $ul.appendChild(document.createElement('li'));
+          $li.textContent = ++count;
+          // 7. 새로 추가된 li 감시해!
+          io.observe($li);
+        }
+      }, {
+        // 8. 타겟이 50% 이상 보이면 실행
+        threshold: 0.5
+      });
+      console.log(io);
+      // 2. li 감시
+      io.observe($li);
+
+    })()
+  </script>
+</html>

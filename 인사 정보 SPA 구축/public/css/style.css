@@ -41,7 +41,7 @@ header {
 
 /* 인사 정보 페이지 */
 #cards_container {
-  width: 80%;
+  width: 60%; /* add custom */
   margin: 10px auto;
   padding: 10px 10px;
 
