@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>실시간 유효성 검사</title>
+</head>
+<body>
+
+
+  <!-- pattern 검증 사용 -->
+    <form>
+        <label for="myInput">숫자를 입력하세요: </label>
+        <span>
+          <input type="text" id="myInput" pattern="[0-9]*" oninvalid="setCustomValidity('숫자가 아닙니다')" oninput="setCustomValidity('')">
+        </span>
+        <input type="submit" value="확인">
+    </form>
+
+    <!-- 기본 검증 사용 -->
+    <label for="myInput">숫자를 입력하세요: </label>
+    <input type="text" id="myInput">
+    <div id="errorText" style="color: red;"></div>
+
+    <script>
+        const inputElement = document.getElementById("myInput");
+        const errorTextElement = document.getElementById("errorText");
+
+        inputElement.addEventListener("input", function() {
+            const inputValue = inputElement.value;
+            if (!/^\d+$/.test(inputValue)) {
+                errorTextElement.textContent = "숫자가 아닙니다";
+            } else {
+                errorTextElement.textContent = "";
+            }
+        });
+    </script>
+</body>
+</html>
+
+
