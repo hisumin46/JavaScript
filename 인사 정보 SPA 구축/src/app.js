@@ -18,13 +18,11 @@ export default class App {
       const { pathname } = location;
       
       if (pathname === "/") {
-        console.log(location);
         location.href = "/web/";
       } else if (pathname === "/web/") {
         // HOME 페이지 랜더링
         new HomePage(this.$tartget);
       } else if (pathname === "/web/signup") {
-        console.log(pathname);
         // 인사정보 등록 페이지
         new SignupPage(this.$tartget);
       }

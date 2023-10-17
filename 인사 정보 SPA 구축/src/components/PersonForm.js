@@ -3,6 +3,7 @@ import storageUtil from "../../utils/storage.js";
 export default class PersonForm {
   constructor($target) {
     this.$target = $target;
+    this.idRender = true;
     
     this.setState();
     this.ivalidEvent();
@@ -17,8 +18,9 @@ export default class PersonForm {
       if (field) { // field
         let mark = (field.text != "MBTI")?`<span class="mark">(필수*)</span>`:"";
         $span.innerHTML = `
-          <label>${field.text}</label>
-          ${mark}
+          <span class="label">
+            <span>${field.text}</span>${mark}
+          </span>
         `; 
       } else { // button
         $span.innerHTML = `
@@ -77,46 +79,10 @@ export default class PersonForm {
   
   
   render() {
-    this.$target.appendChild(this.template());
-  }
-  
-  
-  setState() {
-    // component를 그리기 위한 state setting
-    const fieldMap = {
-      "input": [{"text": "이름", "id" :"name", "pattern": "[ㄱ-ㅎㅏ-ㅣ가-힣]{2,4}", "title": "2~4 글자의 한글만 입력이 가능합니다."}, 
-                {"text": "이메일", "id" :"email", "pattern": "[a-zA-Z0-9]*[@]grepp.co", "title": "이메일 ID는 영문(대소문자 구분 없음)과 숫자만 입력이 가능하며, @grepp.co 형식의 이메일만 입력이 가능합니다."}, 
-                {"text": "닉네임", "id" :"nickname", "pattern": "[a-zA-Z]{3,10}", "title": "대소문자 구분 없이 3~10 글자의 영문만 입력이 가능합니다."}], 
-      "select": [{"text": "직군", "id" :"job"}, 
-                {"text": "MBTI", "id": "mbti"}]};
-    const jobList = [{"text": "직군을 선택해주세요", "value": ""}, {"text": "백엔드", "value": "backend"}, {"text": "프론트엔드", "value": "frontend"}, {"text": "풀스택", "value": "fullstack"}];
-    const mbtiList = [{"text":"MBTI를 선택해주세요", "value": ""}, {"text":"ENFJ", "value":"ENFJ"}, {"text":"ENTJ", "value":"ENTJ"}, {"text":"ENFP", "value":"ENFP"}, {"text":"ENTP", "value":"ENTP"}, {"text":"ESFJ", "value":"ESFJ"}, {"text":"ESTJ", "value":"ESTJ"}, {"text":"ESFP", "value":"ESFP"}, {"text":"ESTP", "value":"ESTP"}, {"text":"INFJ", "value":"INFJ"}, {"text":"INTJ", "value":"INTJ"}, {"text":"INFP", "value":"INFP"}, {"text":"INTP", "value":"INTP"}, {"text":"ISFJ", "value":"ISFJ"}, {"text":"ISTP", "value":"ISTP"}];
-    this.state = {...this.state, ...{ "fieldMap": fieldMap }, ...{ "jobList": jobList }, ...{ "mbtiList": mbtiList }};
-    this.render();
-  }
-
-  submit() {
-    this.$target.querySelector("form").addEventListener("submit", e => {
-      console.log(e.target);
-      const formData = new FormData(e.target);
-      const email = formData.get("email");
-      const nickname = formData.get("nickname");
-
-      const storageObject = new storageUtil;
-      const personalInfo = storageObject.getItem("personalInfo");
-      personalInfo.map(person => {
-        if (email === person.email || nickname === person.nickname) {
-          alert("이메일 혹은 닉네임이 이미 등록되어 있습니다.");
-          return false;
-        }
-      });
-
-      for (let [key, value] of formData) {
-        // storageObject.setItem("")
-        // storage 세팅 
-      }
-      e.preventDefault();
-    });
+    if (this.idRender) {
+      this.$target.appendChild(this.template());
+      this.idRender = false;
+    }
   }
   
   ivalidEvent() {
@@ -141,6 +107,82 @@ export default class PersonForm {
     inputValidStcate.map(input => {
       this.$target.querySelector(`#${input.id}`).pattern = `${input.pattern}`;
       this.$target.querySelector(`#${input.id}`).title = `${input.title}`;
+    });
+  }
+  
+  
+  setState(newState) {
+    const storageObject = new storageUtil;
+    // component를 그리기 위한 state setting
+    const fieldMap = {
+      "input": [{"text": "이름", "id" :"name", "pattern": "[ㄱ-ㅎㅏ-ㅣ가-힣]{2,4}", "title": "2~4 글자의 한글만 입력이 가능합니다."}, 
+      {"text": "이메일", "id" :"email", "pattern": "[a-zA-Z0-9]*[@]grepp.co", "title": "이메일 ID는 영문(대소문자 구분 없음)과 숫자만 입력이 가능하며, @grepp.co 형식의 이메일만 입력이 가능합니다."}, 
+      {"text": "닉네임", "id" :"nickname", "pattern": "[a-zA-Z]{3,10}", "title": "대소문자 구분 없이 3~10 글자의 영문만 입력이 가능합니다."}], 
+      "select": [{"text": "직군", "id" :"job"}, 
+      {"text": "MBTI", "id": "mbti"}]};
+    const jobList = [{"text": "직군을 선택해주세요", "value": ""}, {"text": "백엔드", "value": "backend"}, {"text": "프론트엔드", "value": "frontend"}, {"text": "풀스택", "value": "fullstack"}];
+    const mbtiList = [{"text":"MBTI를 선택해주세요", "value": ""}, {"text":"ENFJ", "value":"ENFJ"}, {"text":"ENTJ", "value":"ENTJ"}, {"text":"ENFP", "value":"ENFP"}, {"text":"ENTP", "value":"ENTP"}, {"text":"ESFJ", "value":"ESFJ"}, {"text":"ESTJ", "value":"ESTJ"}, {"text":"ESFP", "value":"ESFP"}, {"text":"ESTP", "value":"ESTP"}, {"text":"INFJ", "value":"INFJ"}, {"text":"INTJ", "value":"INTJ"}, {"text":"INFP", "value":"INFP"}, {"text":"INTP", "value":"INTP"}, {"text":"ISFJ", "value":"ISFJ"}, {"text":"ISTP", "value":"ISTP"}];
+    this.state = {...this.state, ...{ "fieldMap": fieldMap }, ...{ "jobList": jobList }, ...{ "mbtiList": mbtiList }};
+    
+    if (newState) {
+      this.state.personalInfo.push(newState);
+      this.state.cardStatus.push({"idx": newState.idx, "status": "card"});
+      storageObject.setItem("personalInfo", this.state.personalInfo);
+      storageObject.setItem("cardStatus", this.state.cardStatus);
+    }
+
+    // person/card state setting
+    const personalInfo = storageObject.getItem("personalInfo");
+    const cardStatus = storageObject.getItem("cardStatus");
+    this.state = {...this.state, ...{"personalInfo": personalInfo}, ...{"cardStatus": cardStatus}};
+    console.log(this.state);
+    this.render();
+  }
+  
+  
+  submit() {
+    this.$target.querySelector("form").addEventListener("submit", e => {
+      e.preventDefault();
+      console.log(e.target);
+      const formData = new FormData(e.target);
+      const email = formData.get("email");
+      const nickname = formData.get("nickname");
+
+      // this.state.personalInfo.map(person => {
+      //   if (email === person.email || nickname === person.nickname) {
+      //     alert("이메일 혹은 닉네임이 이미 등록되어 있습니다.");
+      //     return false; 
+      //     // forEach(), map()은 break로 멈출 수 없음
+      //     // 멈추고싶다면 try catch 로 멈추기 하지만 차라리 for문을 쓰는것이 낫다
+      //   }
+      // });
+
+      const personalInfo = this.state.personalInfo;
+      for (let i = 0; i < personalInfo.length; i++) {
+        const person = personalInfo[i];
+        if (email === person.email || nickname === person.nickname) {
+          alert("이메일 혹은 닉네임이 이미 등록되어 있습니다.");
+          return false;
+        }
+      }
+      let newPerson = {};
+      for (let [key, value] of formData) {
+        /*
+        객체에 요소 추가방법
+        - dot notation -> 숫자시작 불가 변수포함 불가
+        - obj.key = "value"
+        - obj["key"] = "value"
+        - bracket notation -> key가 변수일때 사용, 숫자 변수 공백 가능
+        let key = "key test"  
+        obj[key] = "value";			
+        */
+        newPerson[key] = value;
+      }
+      newPerson["idx"] = personalInfo.length;
+      this.setState(newPerson);
+      
+      alert("성공적으로 등록되었습니다.");
+      e.target.reset();
     });
   }
 }

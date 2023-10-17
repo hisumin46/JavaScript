@@ -126,6 +126,9 @@ header {
   border-radius: 1rem;
   box-sizing: border-box;
   background: none;
+  /* add custom */
+  color: #5A5C66;
+  font-size: 1.0em;
 }
 
 .form_elem select {
@@ -135,6 +138,9 @@ header {
   border-radius: 1rem;
   box-sizing: border-box;
   background: none;
+  /* add custom */
+  color: #5A5C66;
+  font-size: 1.0em;
 }
 
 .form_elem button {
@@ -143,5 +149,28 @@ header {
   border: 0;
   border-radius: 1rem;
   box-sizing: border-box;
-  /* background: #dedede; */
+  /* add custom */
+  color: #dedede;
+  background: #29323C;
+  font-size: 1.0em;
+  cursor: pointer;
+}
+
+/* add custom */
+.form_elem button:hover {
+  background: #637488;
+}
+
+/* add custom */
+.label {
+  padding: 5px 3px;
+  font-size: 0.7em;
+  color: #5A5C66;
+  text-align: left;
+  display: block;
+}
+
+/* add custom */
+.mark {
+  color: red;
 }

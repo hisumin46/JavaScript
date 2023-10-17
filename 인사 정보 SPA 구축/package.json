@@ -4,7 +4,7 @@
   "description": "당신은 기존의 인사 정보 페이지를 SPA로 리뉴얼하는 업무를 맡게 되었습니다. **Vanilla JS만을 이용**하여 아래의 요구사항에 맞게 작업해서 **세 시간 내에** 리뉴얼된 페이지를 게시해주세요.",
   "main": "index.js",
   "scripts": {
-    "start": "export PORT=3000 && serve -s",
+    "start": "set PORT=3000 && serve -s",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
