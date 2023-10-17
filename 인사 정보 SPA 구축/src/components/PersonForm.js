@@ -15,7 +15,7 @@ export default class PersonForm {
     const addSpanTag = (field) => {
       const $span = document.createElement("span");
       $span.classList.add("form_elem");
-      if (field) { // field
+      if (field) { // label
         let mark = (field.text != "MBTI")?`<span class="mark">(필수*)</span>`:"";
         $span.innerHTML = `
           <span class="label">
@@ -24,14 +24,18 @@ export default class PersonForm {
         `; 
       } else { // button
         $span.innerHTML = `
+          <span class="label"></span>
           <button type="submit">등록</button>
         `; 
       }
       return $span;
     };
     
+    // form_container div tag
     const $div = document.createElement("div");
     $div.id = "form_container";
+    
+    // form tag
     const $form = document.createElement("form");
     $form.method = "post";
     const fieldMap = this.state.fieldMap;
@@ -47,7 +51,7 @@ export default class PersonForm {
       $input.setAttribute("required", "");
       $span.appendChild($input);
       
-      $form.appendChild($span);
+      $form.appendChild($span); // append form
     });
     
     // select tag
@@ -60,19 +64,18 @@ export default class PersonForm {
       const optionList = (field.id==="job")? this.state.jobList : this.state.mbtiList;
       $select.innerHTML = `
       ${optionList.map((option) => `
-      <option value="${option.value}">${option.text}</option>
-      `).join("")}
-      `;
+        <option value="${option.value}">${option.text}</option>
+      `).join("")}`;
       $span.appendChild($select);
       
-      $form.appendChild($span);
+      $form.appendChild($span); // append form
     });
     
-    // button
+    // button tag
     const $span = addSpanTag();
     $form.appendChild($span);
     
-    $div.appendChild($form);
+    $div.appendChild($form); // append form
     
     return $div;
   }
@@ -124,6 +127,7 @@ export default class PersonForm {
     const mbtiList = [{"text":"MBTI를 선택해주세요", "value": ""}, {"text":"ENFJ", "value":"ENFJ"}, {"text":"ENTJ", "value":"ENTJ"}, {"text":"ENFP", "value":"ENFP"}, {"text":"ENTP", "value":"ENTP"}, {"text":"ESFJ", "value":"ESFJ"}, {"text":"ESTJ", "value":"ESTJ"}, {"text":"ESFP", "value":"ESFP"}, {"text":"ESTP", "value":"ESTP"}, {"text":"INFJ", "value":"INFJ"}, {"text":"INTJ", "value":"INTJ"}, {"text":"INFP", "value":"INFP"}, {"text":"INTP", "value":"INTP"}, {"text":"ISFJ", "value":"ISFJ"}, {"text":"ISTP", "value":"ISTP"}];
     this.state = {...this.state, ...{ "fieldMap": fieldMap }, ...{ "jobList": jobList }, ...{ "mbtiList": mbtiList }};
     
+    // 새로운 state가 있을 경우
     if (newState) {
       this.state.personalInfo.push(newState);
       this.state.cardStatus.push({"idx": newState.idx, "status": "card"});
@@ -135,7 +139,7 @@ export default class PersonForm {
     const personalInfo = storageObject.getItem("personalInfo");
     const cardStatus = storageObject.getItem("cardStatus");
     this.state = {...this.state, ...{"personalInfo": personalInfo}, ...{"cardStatus": cardStatus}};
-    console.log(this.state);
+
     this.render();
   }
   
@@ -143,11 +147,12 @@ export default class PersonForm {
   submit() {
     this.$target.querySelector("form").addEventListener("submit", e => {
       e.preventDefault();
-      console.log(e.target);
       const formData = new FormData(e.target);
       const email = formData.get("email");
       const nickname = formData.get("nickname");
-
+      let newPerson = {};
+      const personalInfo = this.state.personalInfo;
+      
       // this.state.personalInfo.map(person => {
       //   if (email === person.email || nickname === person.nickname) {
       //     alert("이메일 혹은 닉네임이 이미 등록되어 있습니다.");
@@ -157,7 +162,6 @@ export default class PersonForm {
       //   }
       // });
 
-      const personalInfo = this.state.personalInfo;
       for (let i = 0; i < personalInfo.length; i++) {
         const person = personalInfo[i];
         if (email === person.email || nickname === person.nickname) {
@@ -165,7 +169,6 @@ export default class PersonForm {
           return false;
         }
       }
-      let newPerson = {};
       for (let [key, value] of formData) {
         /*
         객체에 요소 추가방법
@@ -182,7 +185,7 @@ export default class PersonForm {
       this.setState(newPerson);
       
       alert("성공적으로 등록되었습니다.");
-      e.target.reset();
+      e.target.reset(); // form input data reset
     });
   }
 }

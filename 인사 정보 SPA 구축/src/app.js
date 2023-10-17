@@ -35,11 +35,13 @@ export default class App {
   }
 
   setData = async() => {
-    let personalInfo = [];
-    const newDatae = await getNewData();
-    newDatae.map((person, index) => personalInfo.push({...person, ...{"idx":index}}))
-    
     const storageObject = new storageUtil;
+    let personalInfo = (storageObject.getItem("personalInfo"))? storageObject.getItem("personalInfo"):[];
+    if (!personalInfo.length) {
+      const newDatae = await getNewData();
+      newDatae.map((person, index) => personalInfo.push({...person, ...{"idx":index}}))
+    }
+    
     storageObject.setItem("personalInfo", personalInfo);
   }
 }

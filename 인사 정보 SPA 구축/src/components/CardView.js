@@ -69,38 +69,34 @@ export default class CardView {
 
   setEvent() {
     // 스크롤 이벤트 - IntersectionObserver - 8개부터 해당하는 div 생성
-    (() => {
-      // target 지정
-      let $cardDiv = this.$target.querySelector(".card:last-child"); // 첫 관찰대상
-      const $div = this.$target.querySelector("#cards_container");
-      /*
-        const io = new IntersectionObserver((entries, observer) => {}, options) 
-        callback함수는 관찰한 대상이 등록되거나 가시성에 변화가 생기면 콜백 함수를 실행
-        io.observe(element) // 관찰할 대상(요소) 등록
-      */
-      
-      // 인터섹션 옵저버를 생성
-      const io = new IntersectionObserver((entries, observer) => {
-        if (entries[0].isIntersecting) { // viewport에 target이 보이면
-          io.unobserve($cardDiv); // (기존의) 관찰대상 중지 
-          this.index++;
-          console.log(this.index);
-          const cardStatusIdxVal = this.state.cardStatus[this.index];
-          const personalInfoIdxVal = this.state.personalInfo[this.index];
-          const $newCardDiv = this.addElement(this.index, cardStatusIdxVal, personalInfoIdxVal);
-          if (!$newCardDiv) return
-          
-          // cards_container - card div
-          $div.appendChild($newCardDiv);
-          io.observe($newCardDiv); // (새로운) 관찰대상 지정
-        }
-      }, {
-        threshold: 0.5 // 타겟이 50% 이상보이면 실행
-      });
-      io.observe($cardDiv); // io 호출
-    })();
+    // target 지정
+    let $cardDiv = this.$target.querySelector(".card:last-child"); // 첫 관찰대상
+    const $div = this.$target.querySelector("#cards_container");
+    /*
+      const io = new IntersectionObserver((entries, observer) => {}, options) 
+      callback함수는 관찰한 대상이 등록되거나 가시성에 변화가 생기면 콜백 함수를 실행
+      io.observe(element) // 관찰할 대상(요소) 등록
+    */
+    
+    // 인터섹션 옵저버를 생성
+    const io = new IntersectionObserver((entries, observer) => {
+      if (entries[0].isIntersecting) { // viewport에 target이 보이면
+        io.unobserve($cardDiv); // (기존의) 관찰대상 중지 
+        this.index++;
+        const cardStatusIdxVal = this.state.cardStatus[this.index];
+        const personalInfoIdxVal = this.state.personalInfo[this.index];
+        const $newCardDiv = this.addElement(this.index, cardStatusIdxVal, personalInfoIdxVal);
+        if (!$newCardDiv) return
+        
+        // cards_container - card div
+        $div.appendChild($newCardDiv);
+        io.observe($newCardDiv); // (새로운) 관찰대상 지정
+      }
+    }, {
+      threshold: 0.5 // 타겟이 50% 이상보이면 실행
+    });
+    io.observe($cardDiv); // io 호출
 
-    console.log(this.index);
     // 카드 click 이벤트
     this.$target.addEventListener("click", (e) => {
       if (e.target.className === "card_plane card_plane--front") {

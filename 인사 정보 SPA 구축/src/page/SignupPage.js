@@ -4,7 +4,7 @@ import PersonForm from "../components/PersonForm.js";
 export default class SignupPage {
   constructor($target) {
     this.$target = $target;
-
+    
     this.render();
   }
 
@@ -18,10 +18,7 @@ export default class SignupPage {
     
     // PersonForm
     new PersonForm($main);
-
-    // $main.innerHTML += `
-
-    // `;
+    
     return $main;
   }
 
