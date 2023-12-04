@@ -70,6 +70,7 @@
 }
 */
 
+import { changeFormat } from "../../utils/common.js";
 import SelectOPtion from "./SelectOption.js";
 
 export default class ProductDetail {
@@ -95,7 +96,7 @@ export default class ProductDetail {
       <img src="${productInfo.imageUrl}" />
       <div class="ProductDetail__info">
         <h2>${productInfo.name}</h2>
-        <div class="ProductDetail__price">${productInfo.price}원~</div>
+        <div class="ProductDetail__price">${changeFormat(productInfo.price)}원~</div>
         <select>
         <option>선택하세요.</option>
         ${productInfo.productOptions.map(option => 

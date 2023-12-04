@@ -21,6 +21,7 @@
 */
 
 import { routeChange } from "../../public/routes/router.js";
+import { changeFormat } from "../../utils/common.js";
 import { storageUtil } from "../../utils/storage.js";
 import ProductDetail from "./ProductDetail.js";
 import ProductListPage from "./ProductList.js";
@@ -53,13 +54,13 @@ export default class SelectOPtion {
         <ul>
           ${selectedOptions.map(selectedOption => `
             <li>
-              ${selectedOption.optionName} ${product.price + selectedOption.optionPrice}원
+              ${selectedOption.optionName} ${changeFormat(product.price + selectedOption.optionPrice)}원
               <input type="text" data-optionId="${selectedOption.optionId}" value="${selectedOption.quantity}">
               <button class="CancelButton">X</button>
             </li>
           `).join('')}
         </ul>
-        <div class="ProductDetail__totalPrice">${getTotalPrice()}원</div>
+        <div class="ProductDetail__totalPrice">${changeFormat(getTotalPrice())}원</div>
         <button class="OrderButton">주문하기</button>
       `;
     }

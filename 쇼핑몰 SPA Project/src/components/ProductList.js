@@ -41,7 +41,7 @@ export default class ProductListPage {
             <img src="${product.imageUrl}">
             <div class="Product__info">
               <div>${product.name}</div>
-              <div>${product.price}~</div>
+              <div>${Number(product.price).toLocaleString()}~</div>
             </div>
           </li>
         `
